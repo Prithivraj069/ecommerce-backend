@@ -14,3 +14,5 @@ GRANT ALL PRIVILEGES on sakila.* TO 'ahkow'@'localhost' WITH GRANT OPTION;
  ```
 FLUSH PRIVILEGES;
 ```
+npm init -y
+npm install express mysql2 cors dotenv bcrypt jsonwebtoken stripe
