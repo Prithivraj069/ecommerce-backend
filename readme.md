@@ -16,3 +16,9 @@ FLUSH PRIVILEGES;
 ```
 npm init -y
 npm install express mysql2 cors dotenv bcrypt jsonwebtoken stripe
+
+DB_HOST=localhost   
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=quickpick
+PORT=3000
