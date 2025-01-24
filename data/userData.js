@@ -60,7 +60,7 @@ try {
 
             const preferenceId = preferenceResult[0].id;
             await connection.query(
-                `INSERT INTO user_marketing_preferences (user_id, preference_id) VALUES (?, ?)`, 
+                `INSERT INTO  user_marketing_preferences (user_id, preference_id) VALUES (?, ?)`, 
                 [userId, preferenceId]
             );
         }
@@ -136,8 +136,8 @@ async function deleteUser(id) {
     try {
         await connection.beginTransaction();
         
-        await connection.query(`DELETE FROM user_marketing_preferences WHERE user_idm = ?`, [id]);
-        await connection.query(`DELETE FROM users WHERE user_id = ?`, [id]);
+        await connection.query(`DELETE FROM user_marketing_preferences WHERE user_id = ?`, [id]);
+        await connection.query(`DELETE FROM users WHERE id = ?`, [id]);
 
         await connection.commit();
     } catch (e) {

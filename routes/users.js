@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
-const AuthenticatedWithJWT= require('../middleware/AuthenticatedWithJWT');
+const AuthenticateWithJWT= require('../middleware/AuthenticatedWithJWT');
 
+//register new users function
 router.post('/register', async (req, res) => {
     try {
         // const {name, email, password, salutation, marketingPreferences, country} = req.body;
@@ -15,6 +16,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
+//login user function
 router.post('/login', async (req, res)=> {
     try {
         const {email, password} = req.body;
@@ -41,7 +43,8 @@ router.post('/login', async (req, res)=> {
     }
 });
 
-router.get('/me',AuthenticatedWithJWT, async (req, res) => {
+//get logged in user function
+router.get('/me',AuthenticateWithJWT, async (req, res) => {
     try {
         const user = await userService.getUserDetailsById(req.userId);
         if(!user) {
@@ -59,7 +62,8 @@ router.get('/me',AuthenticatedWithJWT, async (req, res) => {
     }
 })
 
-router.put('/me', AuthenticatedWithJWT, async (req, res) => {
+//update or modify logged in user function
+router.put('/me', AuthenticateWithJWT, async (req, res) => {
     try {
         const user = req.body;
 
@@ -81,9 +85,10 @@ router.put('/me', AuthenticatedWithJWT, async (req, res) => {
         })
     }
 
-})
+});
 
-router.delete('/me',AuthenticatedWithJWT, async (req, res) => {
+//delete logged in user function
+router.delete('/me',AuthenticateWithJWT, async (req, res) => {
     try {
         //userId extracted from jwt
         await userService.deleteUserDetails(req.userId);

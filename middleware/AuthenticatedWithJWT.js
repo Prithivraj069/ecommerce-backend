@@ -1,21 +1,21 @@
 const jwt = require('jsonwebtoken');
-function AuthenticatedWithJWT(req, res, next) {
-    const authHeader = req.headers.authorization;
 
-    if(!authHeader || !authHeader.startsWith('Bearer')) {
-        return res.status(401).json({message: "Authorization header is missing or malformed"});
-    }
+// Middleware to extract user ID from JWT
+function AuthenticateWithJWT(req, res, next) {
+  const authHeader = req.headers.authorization;
 
-    const token = authHeader.split('')[1];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Authorization header missing or malformed' });
+  }
 
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.userId;
-        next();
-
-    } catch (e) {
-        return res.status(403).json({message: "Invalid or expired token"});
-    }
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Replace with your JWT secret
+    req.userId = decoded.userId; // Assuming the JWT payload contains `id`
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: 'Invalid or expired token' });
+  }
 }
 
-module.exports = AuthenticatedWithJWT
+module.exports = AuthenticateWithJWT
