@@ -73,8 +73,8 @@ router.put('/me', AuthenticateWithJWT, async (req, res) => {
             })
         }
 
-        const userId = req.userId;
-        await userService.updateUserDetails(userId, req.body);
+        
+        await userService.updateUserDetails(req.userId, req.body);
         res.json({
             'message': 'user details updated'
         })
