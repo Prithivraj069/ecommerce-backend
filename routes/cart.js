@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const CartService = require('../services/cartService');
-const jwt = require('jsonwebtoken');
-const AuthenticateWithJWT = require('../middleware/AuthenticatedWithJWT');
+const authenticateToken = require('../middleware/UserAuth');
 
+
+router.use(authenticateToken);
 
 router.get('/', async (req, res)=> {
     try {
-        res.send("get card route");
+        const cartContents = await CartService.getCartContent(req.user.userId);
+        res.json(cartContents);
 
     } catch (e) {
         res.status(500).json({
@@ -18,10 +20,12 @@ router.get('/', async (req, res)=> {
 
 router.put('/', async (req, res) => {
     try {
-        res.send("put cart route");
+        const cartItems = req.body.cartItems;
+        await CartService.updateCart(req,user.userId, cartItems);
+        res.json({message: " cart updated successfully"});
 
     } catch (e) {
-        res.status(500).json({
+        res.status(400).json({
             message: e.message
         })
     }
