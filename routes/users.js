@@ -96,6 +96,7 @@ router.delete('/me',AuthenticateWithJWT, async (req, res) => {
             'message': "User account deleted successfuly"
         })
     } catch (e) {
+        console.log(e);
         res.status(500).json({
             'message':'Internal server error'
         })

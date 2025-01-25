@@ -147,26 +147,27 @@ async function updateUser(id, { name, email, salutation, country, marketingPrefe
 
 //delete user
 async function deleteUser(id) {
-  if (!id || typeof id !== "number") {
-    throw new Error("Invalid user Id");
+  if (!id || typeof id !== 'number') {
+      throw new Error('Invalid user ID');
   }
 
   const connection = await pool.getConnection();
   try {
-    await connection.beginTransaction();
+      await connection.beginTransaction();
 
-    await connection.query(
-      `DELETE FROM user_marketing_preferences WHERE user_id = ?`,
-      [id]
-    );
-    await connection.query(`DELETE FROM users WHERE id = ?`, [id]);
+         // Delete user
+      await connection.query(`DELETE FROM users WHERE id = ?`, [id]);
 
-    await connection.commit();
-  } catch (e) {
-    await connection.rollback();
-    throw e;
+      // Delete marketing preferences
+       await connection.query(`DELETE FROM user_marketing_preferences WHERE user_id = ?`, [id]);
+
+      await connection.commit();
+  } catch (error) {
+    console.log(error);
+      await connection.rollback();
+      throw error;
   } finally {
-    connection.release();
+      connection.release();
   }
 }
 
