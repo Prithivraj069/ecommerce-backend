@@ -3,6 +3,15 @@ const router = express.Router();
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
 const AuthenticateWithJWT= require('../middleware/AuthenticatedWithJWT');
+const session = require('express-session');
+
+// const app = express();
+// app.use(session({
+//     secret: process.env.JWT_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {secure: false},
+// }))
 
 //register new users function
 router.post('/register', async (req, res) => {
@@ -42,6 +51,18 @@ router.post('/login', async (req, res)=> {
         })
     }
 });
+
+//logged out user
+// router.post('/logout', (req, res) => {
+ 
+//     req.session.destroy((err) => {
+//       if (err) {
+//         return res.status(500).send('Logout failed');
+//       }
+//       res.clearCookie('connect.sid'); // Clear session cookie
+//       res.status(200).send('Logged out successfully');
+//     });
+//   });
 
 //get logged in user function
 router.get('/me',AuthenticateWithJWT, async (req, res) => {
