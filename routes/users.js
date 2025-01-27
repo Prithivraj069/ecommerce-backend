@@ -65,43 +65,45 @@ router.get('/me',AuthenticateWithJWT, async (req, res) => {
 //update or modify logged in user function
 router.put('/me', AuthenticateWithJWT, async (req, res) => {
     try {
-        const user = req.body;
-
-        if(!user.name || !user.email || !user.salutation || !user.marketingPreferences || !user.country) {
+        console.log(req.body);
+        // todo: validate if all the keys in req.body exists
+        if (!req.body.name || !req.body.email || !req.body.salutation || !req.body.marketingPreferences || !req.body.country) {
             return res.status(401).json({
-                message: "invalid payload or missing keys"
+                'error':'Invalid payload or missing keys'
             })
         }
-
+        const userId = req.userId;
+        await userService.updateUserDetails(userId, req.body);
+        res.json({
+            'message':'User details updated'
+        })
         
-        await userService.updateUserDetails(req.userId, req.body);
-        res.json({
-            'message': 'user details updated'
-        })
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({
-            'message': 'Internal server error'
-        })
-    }
 
-});
-
-//delete logged in user function
-router.delete('/me',AuthenticateWithJWT, async (req, res) => {
-    try {
-        //userId extracted from jwt
-        await userService.deleteUserDetails(req.userId);
-        res.json({
-            'message': "User account deleted successfuly"
-        })
-    } catch (e) {
+    } catch (e) {   
         console.log(e);
         res.status(500).json({
             'message':'Internal server error'
         })
+
+    } 
+})
+
+
+//delete logged in user function
+router.delete('/me', AuthenticateWithJWT, async (req, res) => {
+    try {
+      await userService.deleteUserDetails(req.userId);
+      res.json({
+         'message': "User account deleted"
+      })
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({
+         'message':'Internal Server Error'
+      })
     }
-} )
+ })
+ 
 
 
 module.exports = router;
